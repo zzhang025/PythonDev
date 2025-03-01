@@ -1,10 +1,12 @@
+from enum import Enum 
+
 class Movie:
     def __init__(self, id, title):
-        self._id = id 
+        self._id = id
         self._title = title
     
     def getId(self):
-        return self._id 
+        return self._id
 
     def getTitle(self):
         return self._title
@@ -12,12 +14,11 @@ class Movie:
 class User: 
     def __init__(self, id, name) -> None:
         self._id = id
-        self._name = name 
+        self._name = name
     
     def getId(self):
         return self._id
 
-from enum import Enum 
 class MovieRating(Enum):
     NOT_RATED = 0
     ONE = 1
@@ -76,14 +77,13 @@ class MovieRecommendation:
             return self._recommendMovieExistingUser(user)
     
     def _recommendMovieNewUser(self):
-        best_movie = None 
+        best_movie = None
         best_rating = 0
         for movie in self._movieRatings.getMovies():
-            rating = self._movieRatings.getAverageRating(Movie)
+            rating = self._movieRatings.getAverageRating(movie)
             if rating > best_rating:
                 best_movie = movie 
-                best_rating = rating
-        
+                best_rating = rating      
         return best_movie.getTitle() if best_movie else None 
     
     def _recommendMovieExistingUser(self, user):
@@ -93,7 +93,7 @@ class MovieRecommendation:
         for reviewer in self._movieRatings.getUsers():
             if reviewer.getId() == user.getId():
                 continue
-            score = self._getSimilarScore(user, reviewer)
+            score = self._getSimilarityScore(user, reviewer)
             if score < similarity_score:
                 similarity_score = score
                 recommended_movie = self._recommendUnwatchedMovie(user,reviewer)
@@ -126,3 +126,4 @@ class MovieRecommendation:
                 best_movie = movie
                 best_rating = cur_movie_ratings[reviewer_id].value
         return best_movie
+    
